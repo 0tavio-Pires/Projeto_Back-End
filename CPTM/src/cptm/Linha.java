@@ -14,9 +14,9 @@ public class Linha {
         this.trens = new ArrayList<>();
         this.estacoes = new ArrayList<>();
     }
-   
-    public void addTrain(Trem trem) {
-        this.trens.add(trem);
+    
+    public void addTrem(Trem Trem) {
+        this.trens.add(Trem);
     }
     
     public void addEstacao(Estacao Estacao) {
@@ -45,5 +45,7 @@ public class Linha {
 
 	public void setEstacoes(List<Estacao> estacoes) {
 		this.estacoes = estacoes;
-	}    
+	}
+    
+    
 }
