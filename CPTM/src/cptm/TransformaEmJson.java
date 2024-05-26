@@ -10,9 +10,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class TransformaEmJson {
 	
 	try {
-	ObjectMapper mapper = new ObjectMapper();
+		ObjectMapper mapper = new ObjectMapper();
 
-	String jsonData = mapper.writeValueAsString(thomas);
+		String jsonData = mapper.writeValueAsString(thomas);
 	
     Map<String, Object> jsonMap = mapper.readValue(jsonData, Map.class);
 
