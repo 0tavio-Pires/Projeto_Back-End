@@ -5,7 +5,7 @@ import java.util.List;
 import com.cptm.model.Estacao;
 import com.cptm.model.Trem;
 
-public class ControladorDeTrem implements Trem{
+public class ControladorDeTrem {
     private Trem trem;
     private List<Estacao> rota;
     private int estacaoAtualIndex;

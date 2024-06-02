@@ -6,6 +6,10 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.cptm.model.AddEstacao;
+import com.cptm.model.Estacao;
+import com.cptm.model.Trem;
+
 @SpringBootTest
 class ProjetoCptmApplicationTests {
 

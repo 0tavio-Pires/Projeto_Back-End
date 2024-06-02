@@ -2,8 +2,9 @@ package com.cptm.model;
 
 import java.util.ArrayList;
 
-import com.cptm.model.Estacao;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+@RequestMapping("/addEstacao")
 public interface AddEstacao {
 	
 	public static void cadastraEstacao(Estacao estacao, ArrayList<Estacao> lista) {

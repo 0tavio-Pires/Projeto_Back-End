@@ -1,35 +1,24 @@
 package com.cptm.controller;
 
-import com.example.jsonmicroservice.model.Person;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import com.cptm.model.TransformaEmJson;
+import org.springframework.context.annotation.Import;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
+@Import(TransformaEmJson.class)
 public class JsonController {
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final Object thomas;
 
-    @PostMapping("/object-to-json")
-    public String objectToJson(@RequestBody Person person) {
-        try {
-            return objectMapper.writeValueAsString(person);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return null;
-        }
+    public JsonController(Object thomas) {
+        this.thomas = thomas;
     }
 
-    @PostMapping("/json-to-object")
-    public Person jsonToObject(@RequestBody String json) {
-        try {
-            return objectMapper.readValue(json, Person.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return null;
-        }
+    @GetMapping("/thomas")
+    public void transformarEExibirDadosEmJson() {
+        TransformaEmJson.transformarEExibirDadosEmJson(thomas);
     }
 }

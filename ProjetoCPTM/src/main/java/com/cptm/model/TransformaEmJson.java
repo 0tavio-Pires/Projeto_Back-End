@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Configuration
 public class TransformaEmJson {
     @Bean
-    void transformarEExibirDadosEmJson(Object thomas) {
+	public static void transformarEExibirDadosEmJson(Object thomas) {
         try {
             ObjectMapper mapper = new ObjectMapper();
             
