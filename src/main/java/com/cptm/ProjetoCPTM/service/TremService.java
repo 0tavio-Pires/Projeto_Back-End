@@ -19,6 +19,7 @@ public class TremService {
         estacoes.add(new Estacao("1", "Estação Central", "Rua Central, 123", "Linha 1", false, null, null, false));
         estacoes.add(new Estacao("2", "Estação Norte", "Rua Norte, 456", "Linha 1", false, null, null, false));
         estacoes.add(new Estacao("3", "Estação Sul", "Rua Sul, 789", "Linha 1", false, null, null, false));
+        estacoes.add(new Estacao("4", "Estação Oeste", "Rua Oeste, 1322", "Linha 1", false, null, null, false));
 
         List<Trem> trens = new ArrayList<>();
         trens.add(new Trem("1", "Trem 1", 200, null, 8, true, "Modelo A", 0, 0)); // Inicia na posição 0 no lado A
@@ -46,6 +47,33 @@ public class TremService {
         }
     }
 
+    public void adicionarTrem(Trem trem) {
+        linha.getTrens().add(trem);
+    }
+
+    public void alterarStatusTrem(String id, boolean status) {
+        for (Trem trem : linha.getTrens()) {
+            if (trem.getId().equals(id)) {
+                if (!status) {
+                    removerTremDaEstacao(trem);
+                }
+                trem.setStatus(status);
+                break;
+            }
+        }
+    }
+
+    private void removerTremDaEstacao(Trem trem) {
+        List<Estacao> estacoes = linha.getEstacoes();
+        for (Estacao estacao : estacoes) {
+            if (trem.getId().equals(estacao.getOcupadoLadoA())) {
+                estacao.setOcupadoLadoA(null);
+            } else if (trem.getId().equals(estacao.getOcupadoLadoB())) {
+                estacao.setOcupadoLadoB(null);
+            }
+        }
+    }
+
     private void iniciarAtualizacao() {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -61,6 +89,10 @@ public class TremService {
         int tamanhoEstacoes = estacoes.size();
 
         for (Trem trem : linha.getTrens()) {
+            if (!trem.isStatus()) {
+                continue; // Ignora trens com status false
+            }
+
             if (trem.getAtraso() > 0) {
                 trem.setAtraso(trem.getAtraso() - 1);
             } else {

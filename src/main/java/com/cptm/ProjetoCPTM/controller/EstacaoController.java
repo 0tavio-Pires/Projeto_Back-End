@@ -42,6 +42,6 @@ public class EstacaoController {
 
     @GetMapping("/detalhes")
     public List<Estacao> obterDetalhesEstacao() {
-        return tremService.getEstacoes(); 		
+        return tremService.getEstacoes();
     }
 }
