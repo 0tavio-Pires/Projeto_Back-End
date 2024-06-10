@@ -16,17 +16,39 @@ public class TremService {
 
     public TremService() {
         List<Estacao> estacoes = new ArrayList<>();
-        estacoes.add(new Estacao("1", "Estação Central", "Rua Central, 123", "Linha 1", false, null, null, false));
-        estacoes.add(new Estacao("2", "Estação Norte", "Rua Norte, 456", "Linha 1", false, null, null, false));
-        estacoes.add(new Estacao("3", "Estação Sul", "Rua Sul, 789", "Linha 1", false, null, null, false));
-        estacoes.add(new Estacao("4", "Estação Oeste", "Rua Oeste, 1322", "Linha 1", false, null, null, false));
+        estacoes.add(new Estacao("1", "Jundiaí", "Rua das Margaridas, 123", "Linha 7", true, null, null, false));
+        estacoes.add(new Estacao("2", "Várzea Paulista", "Avenida dos Girassóis, 456", "Linha 7", true, null, null, false));
+        estacoes.add(new Estacao("3", "Campo Limpo Paulista", "Travessa das Violetas, 789", "Linha 7", true, null, null, false));
+        estacoes.add(new Estacao("4", "Boturuju", "Alameda das Orquídeas, 1011", "Linha 7", true, null, null, false));
+        estacoes.add(new Estacao("5", "Francisco Morato", "Praça das Rosas, 1315", "Linha 7", true, null, null, false));
+        estacoes.add(new Estacao("6", "Baltazar Fidélis", "Rua dos Lírios, 1718", "Linha 7", true, null, null, false));
+        estacoes.add(new Estacao("7", "Franco da Rocha", "Avenida das Hortênsias, 1920", "Linha 7", true, null, null, false));
+        estacoes.add(new Estacao("8", "Caieras", "Travessa dos Cravos, 2223", "Linha 7", true, null, null, false));
+        estacoes.add(new Estacao("9", "Perus", "Alameda dos Jasmins, 2425", "Linha 7", true, null, null, false));
+        estacoes.add(new Estacao("10", "Vila Aurora", "Praça das Tulipas, 2627", "Linha 7", true, null, null, false));
+        estacoes.add(new Estacao("11", "Jaraguá", "Rua das Begônias, 2829", "Linha 7", true, null, null, false));
+        estacoes.add(new Estacao("12", "Vila Clarice", "Avenida dos Narcisos, 3031", "Linha 7", true, null, null, false));
+        estacoes.add(new Estacao("13", "Pirituba", "Travessa das Camélias, 3233", "Linha 7", true, null, null, false));
+        estacoes.add(new Estacao("14", "Piqueri", "Alameda das Azaleias, 3435", "Linha 7", true, null, null, false));
+        estacoes.add(new Estacao("15", "Lapa", "Praça das Bromélias, 3637", "Linha 7", true, null, null, false));
+        estacoes.add(new Estacao("16", "Água Branca", "Rua das Dálias, 3839", "Linha 7", true, null, null, false));
+        estacoes.add(new Estacao("17", "Barra Funda", "Avenida das Magnólias, 4041", "Linha 7", true, null, null, false));
+        estacoes.add(new Estacao("18", "Luz", "Travessa dos Hibiscos, 4243", "Linha 7", true, null, null, false));
+        estacoes.add(new Estacao("19", "Brás", "Alameda das Margaridas, 4445", "Linha 7", true, null, null, false));
 
         List<Trem> trens = new ArrayList<>();
-        trens.add(new Trem("1", "Trem 1", 200, null, 8, true, "Modelo A", 0, 0)); // Inicia na posição 0 no lado A
-        trens.add(new Trem("2", "Trem 2", 200, null, 8, true, "Modelo A", 0, 1)); // Inicia na posição 1 no lado A
-        trens.add(new Trem("3", "Trem 3", 200, null, 8, true, "Modelo A", 0, 2)); // Inicia na posição 2 no lado A
+        trens.add(new Trem("1", "Trem Thomas", 500, null, 8, true, "Modelo 9500", 0, 0)); // Inicia na posição 0 no lado A
+        trens.add(new Trem("2", "Trem Emily", 500, null, 8, true, "Modelo 9500", 0, 1)); // Inicia na posição 1 no lado A
+        trens.add(new Trem("3", "Trem James", 500, null, 8, true, "Modelo 9500", 0, 2)); // Inicia na posição 2 no lado A
+        trens.add(new Trem("4", "Trem Perci", 500, null, 8, true, "Modelo 9500", 0, 3)); // Inicia na posição 0 no lado A
+        trens.add(new Trem("5", "Trem Edward", 500, null, 8, true, "Modelo 9500", 0, 4)); // Inicia na posição 1 no lado A
+        trens.add(new Trem("6", "Trem Toby", 400, null, 7, true, "Modelo 8500", 0, 14)); // Inicia na posição 2 no lado A
+        trens.add(new Trem("7", "Trem Henry", 400, null, 7, true, "Modelo 8500", 0, 15)); // Inicia na posição 0 no lado A
+        trens.add(new Trem("8", "Trem Gordon", 400, null, 7, true, "Modelo 8500", 0, 16)); // Inicia na posição 1 no lado A
+        trens.add(new Trem("9", "Trem Ben", 400, null, 7, true, "Modelo 8500", 0, 17)); // Inicia na posição 2 no lado A
+        trens.add(new Trem("10", "Trem Oliver", 400, null, 7, true, "Modelo 8500", 0, 18)); // Inicia na posição 0 no lado A
 
-        linha = new Linha("1", "Linha 1", new ArrayList<>(estacoes), new ArrayList<>(trens));
+        linha = new Linha("0x3A7F2", "Linha 7 - Ruby", new ArrayList<>(estacoes), new ArrayList<>(trens));
         iniciarAtualizacao();
     }
 
@@ -51,6 +73,10 @@ public class TremService {
         linha.getTrens().add(trem);
     }
 
+    public void adicionarEstacao(Estacao estacao) {
+        linha.getEstacoes().add(estacao);
+    }
+
     public void alterarStatusTrem(String id, boolean status) {
         for (Trem trem : linha.getTrens()) {
             if (trem.getId().equals(id)) {
@@ -63,28 +89,7 @@ public class TremService {
         }
     }
 
-    private void removerTremDaEstacao(Trem trem) {
-        List<Estacao> estacoes = linha.getEstacoes();
-        for (Estacao estacao : estacoes) {
-            if (trem.getId().equals(estacao.getOcupadoLadoA())) {
-                estacao.setOcupadoLadoA(null);
-            } else if (trem.getId().equals(estacao.getOcupadoLadoB())) {
-                estacao.setOcupadoLadoB(null);
-            }
-        }
-    }
-
-    private void iniciarAtualizacao() {
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                atualizarTrens();
-            }
-        }, 0, 5000);
-    }
-
-    private void atualizarTrens() {
+    public void atualizarTrens() {
         List<Estacao> estacoes = linha.getEstacoes();
         int tamanhoEstacoes = estacoes.size();
 
@@ -156,5 +161,26 @@ public class TremService {
                 }
             }
         }
+    }
+
+    private void removerTremDaEstacao(Trem trem) {
+        List<Estacao> estacoes = linha.getEstacoes();
+        for (Estacao estacao : estacoes) {
+            if (trem.getId().equals(estacao.getOcupadoLadoA())) {
+                estacao.setOcupadoLadoA(null);
+            } else if (trem.getId().equals(estacao.getOcupadoLadoB())) {
+                estacao.setOcupadoLadoB(null);
+            }
+        }
+    }
+
+    private void iniciarAtualizacao() {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                atualizarTrens();
+            }
+        }, 0, 5000);
     }
 }

@@ -1,27 +1,53 @@
 package com.cptm.ProjetoCPTM.controller;
 
-import java.util.ArrayList;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.cptm.ProjetoCPTM.model.AddEstacao;
 import com.cptm.ProjetoCPTM.model.Estacao;
+import com.cptm.ProjetoCPTM.service.TremService;
+
+import java.util.List;
 
 @RestController
+@RequestMapping("/estacao")
 public class AddEstacaoController {
-	
-	@GetMapping("/addEstacao")
-	public ArrayList<Estacao> getAddEstacoes() {
-		
-	    ArrayList<Estacao> estacoes = new ArrayList<>();
 
-	    Estacao estacao1 = new Estacao("1", "Estação A", "Local A", "Linha 1", true, null, null, false);
-	    Estacao estacao2 = new Estacao("2", "Estação B", "Local B", "Linha 2", true, null, null, false);
+    @Autowired
+    private TremService tremService;
 
-	    AddEstacao.cadastraEstacao(estacao1, estacoes);
-	    AddEstacao.cadastraEstacao(estacao2, estacoes);
-	    
-	    return estacoes;
-	}
+    @PostMapping("/adicionar")
+    public void adicionarEstacao(@RequestBody Estacao estacao) {
+        tremService.adicionarEstacao(estacao);
+    }
+
+    @PostMapping("/alterarStatus")
+    public void alterarStatusTrem(@RequestBody StatusRequest request) {
+        tremService.alterarStatusTrem(request.getId(), request.isStatus());
+    }
+
+    @GetMapping("/listar")
+    public List<Estacao> listarEstacoes() {
+        return tremService.getLinha().getEstacoes();
+    }
+
+    public static class StatusRequest {
+        private String id;
+        private boolean status;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public boolean isStatus() {
+            return status;
+        }
+
+        public void setStatus(boolean status) {
+            this.status = status;
+        }
+    }
 }
