@@ -1,0 +1,28 @@
+{
+  "referenceDate": "2024-10-01",
+  "lines": [
+    ["L1","1 · Azul","#2464d9","Metrô","M16","Tucuruvi|Parada Inglesa|Jardim São Paulo–Ayrton Senna|Santana|Carandiru|Portuguesa–Tietê|Armênia|Tiradentes|Luz|São Bento|Sé|Liberdade|São Joaquim|Vergueiro|Paraíso|Ana Rosa|Vila Mariana|Santa Cruz|Praça da Árvore|Saúde|São Judas|Conceição|Jabaquara"],
+    ["L2","2 · Verde","#18a77b","Metrô","M16","Vila Madalena|Sumaré|Clínicas|Consolação|Trianon–Masp|Brigadeiro|Paraíso|Ana Rosa|Chácara Klabin|Santos–Imigrantes|Alto do Ipiranga|Sacomã|Tamanduateí|Vila Prudente"],
+    ["L3","3 · Vermelha","#ef5350","Metrô","M16","Palmeiras–Barra Funda|Marechal Deodoro|Santa Cecília|República|Anhangabaú|Sé|Pedro II|Brás|Bresser–Mooca|Belém|Tatuapé|Carrão|Penha|Vila Matilde|Guilhermina–Esperança|Patriarca–Vila Ré|Artur Alvim|Corinthians–Itaquera"],
+    ["L4","4 · Amarela","#f4cc41","ViaQuatro","M4","Luz|República|Higienópolis–Mackenzie|Paulista|Oscar Freire|Fradique Coutinho|Faria Lima|Pinheiros|Butantã|São Paulo–Morumbi|Vila Sônia"],
+    ["L5","5 · Lilás","#ac74d2","ViaMobilidade","M5","Capão Redondo|Campo Limpo|Vila das Belezas|Giovanni Gronchi|Santo Amaro|Largo Treze|Adolfo Pinheiro|Alto da Boa Vista|Borba Gato|Brooklin|Campo Belo|Eucaliptos|Moema|AACD–Servidor|Hospital São Paulo|Santa Cruz|Chácara Klabin"],
+    ["L7","7 · Rubi","#bc245d","CPTM · 2024","CPTM","Jundiaí|Várzea Paulista|Campo Limpo Paulista|Botujuru|Francisco Morato|Baltazar Fidélis|Franco da Rocha|Caieiras|Perus|Vila Aurora|Jaraguá|Vila Clarice|Pirituba|Piqueri|Lapa (Linha 7)|Água Branca|Palmeiras–Barra Funda|Luz|Brás"],
+    ["L8","8 · Diamante","#96a6b8","ViaMobilidade","CPTM","Júlio Prestes|Palmeiras–Barra Funda|Lapa (Linha 8)|Domingos de Moraes|Imperatriz Leopoldina|Presidente Altino|Osasco|Comandante Sampaio|Quitaúna|General Miguel Costa|Carapicuíba|Santa Terezinha|Antônio João|Barueri|Jardim Belval|Jardim Silveira|Jandira|Sagrado Coração|Engenheiro Cardoso|Itapevi|Santa Rita|Amador Bueno"],
+    ["L9","9 · Esmeralda","#30b9a1","ViaMobilidade","CPTM","Osasco|Presidente Altino|Ceasa|Villa Lobos–Jaguaré|Cidade Universitária|Pinheiros|Hebraica–Rebouças|Cidade Jardim|Vila Olímpia|Berrini|Morumbi|Granja Julieta|Santo Amaro|Socorro|Jurubatuba|Autódromo|Primavera–Interlagos|Grajaú|Mendes–Vila Natal"],
+    ["L10","10 · Turquesa","#42b5ce","CPTM · 2024","CPTM","Brás|Juventus–Mooca|Ipiranga|Tamanduateí|São Caetano do Sul|Utinga|Prefeito Saladino|Prefeito Celso Daniel–Santo André|Capuava|Mauá|Guapituba|Ribeirão Pires|Rio Grande da Serra"],
+    ["L11","11 · Coral","#f18446","CPTM · 2024","CPTM","Luz|Brás|Tatuapé|Corinthians–Itaquera|Dom Bosco|José Bonifácio|Guaianases|Antônio Gianetti Neto|Ferraz de Vasconcelos|Poá|Calmon Viana|Suzano|Jundiapeba|Braz Cubas|Mogi das Cruzes|Estudantes"],
+    ["L12","12 · Safira","#4488ca","CPTM · 2024","CPTM","Brás|Tatuapé|Engenheiro Goulart|USP Leste|Comendador Ermelino|São Miguel Paulista|Jardim Helena–Vila Mara|Itaim Paulista|Jardim Romano|Engenheiro Manoel Feio|Itaquaquecetuba|Aracaré|Calmon Viana"],
+    ["L13","13 · Jade","#8eb443","CPTM · 2024","CPTM","Engenheiro Goulart|Guarulhos–Cecap|Aeroporto–Guarulhos"],
+    ["L15","15 · Prata","#abb6c5","Metrô","MONO15","Vila Prudente|Oratório|São Lucas|Camilo Haddad|Vila Tolstói|Vila União|Jardim Planalto|Sapopemba|Fazenda da Juta|São Mateus|Jardim Colonial"]
+  ],
+  "anchors": {
+    "Tucuruvi":[940,100],"Jabaquara":[860,990],"Vila Madalena":[500,570],"Vila Prudente":[1080,670],
+    "Palmeiras–Barra Funda":[660,330],"República":[760,440],"Sé":[855,510],"Luz":[830,385],"Brás":[950,455],
+    "Paraíso":[810,630],"Ana Rosa":[845,675],"Santa Cruz":[845,780],"Chácara Klabin":[895,715],"Tamanduateí":[1020,640],
+    "Consolação":[665,550],"Paulista":[640,565],"Pinheiros":[570,665],"Vila Sônia":[255,800],
+    "Capão Redondo":[270,950],"Santo Amaro":[570,870],"Jundiaí":[265,65],"Júlio Prestes":[780,340],
+    "Osasco":[350,430],"Presidente Altino":[380,415],"Amador Bueno":[60,570],"Mendes–Vila Natal":[545,1110],
+    "Rio Grande da Serra":[1320,1040],"Estudantes":[1720,570],"Tatuapé":[1130,435],"Corinthians–Itaquera":[1400,435],
+    "Calmon Viana":[1560,335],"Engenheiro Goulart":[1180,270],"Aeroporto–Guarulhos":[1260,130],"Jardim Colonial":[1430,805]
+  }
+}

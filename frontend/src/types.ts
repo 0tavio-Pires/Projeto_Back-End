@@ -1,0 +1,15 @@
+export type Line={id:string;name:string;color:string;operator:string;profileId:string;enabled:boolean};
+export type Station={id:string;name:string;x:number;y:number;enabled:boolean};
+export type Node={id:string;stationId:string;lineId:string;direction:string;enabled:boolean};
+export type Edge={id:string;from:string;to:string;resourceId:string;lengthMeters:number;maxSpeedKmh:number;connection:boolean;verified:boolean;enabled:boolean;source:string};
+export type Profile={id:string;name:string;gaugeMm:number;power:string;signalling:string;technology:string};
+export type Dependency={id:string;fromLine:string;toLine:string;reason:string;operational:boolean};
+export type Train={id:string;number:string;model:string;profileId:string;capacity:number;carriages:number;assignedLineId:string;currentLineId:string;nodeId:string|null;edgeId:string|null;progressMeters:number;speedKmh:number;delaySeconds:number;dwellRemaining:number;active:boolean;movement:string;transfer:string;targetLineId:string|null;targetNodeId:string|null;route:string[];reason:string};
+export type Incident={id:string;label:string;description:string;category:string;severity:string;targetType:'LINE'|'STATION'|'EDGE'|'TRAIN';targetId:string;effect:string;status:string;createdAt:string;resolvedAt:string|null;createdBy:string;acknowledgedBy:string|null};
+export type Impact={incidentId:string;lineId:string;label:string;severity:string;level:string;effect:string;path:string[];reason:string};
+export type Network={schemaVersion:number;version:number;name:string;referenceDate:string;notes:string;sources:string[];updatedAt:string;running:boolean;timeScale:number;elapsedSeconds:number;lines:Record<string,Line>;stations:Record<string,Station>;nodes:Record<string,Node>;edges:Record<string,Edge>;profiles:Record<string,Profile>;dependencies:Record<string,Dependency>;trains:Record<string,Train>;incidents:Record<string,Incident>};
+export type Snapshot={network:Network;impacts:Impact[];metrics:{total:number;active:number;moving:number;waiting:number;byLine:Record<string,number>;openIncidents:number;meanDelay:number;medianDelay:number;modeDelay:number[]};fault:string|null};
+export type Session={username:string;roles:string[];csrf:string;csrfHeader:string};
+export type Route={trainId:string;targetLineId:string;destinationNodeId:string;edgeIds:string[];estimatedSeconds:number;lineChanges:number;stateVersion:number;steps:string[]};
+export type History={id:string;version:number;at:string;actor:string;action:string;detail:string};
+export type Action=(path:string,body?:unknown,method?:string)=>Promise<boolean>;
