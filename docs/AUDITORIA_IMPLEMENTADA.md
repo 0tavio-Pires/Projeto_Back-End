@@ -37,9 +37,19 @@ Impactos diretos, dependências operacionais e riscos por integração são dife
 
 ## Validação
 
+A evolução desktop adiciona um inicializador Electron com sandbox e um motor Java separado. O pacote Windows inclui Temurin, fixa seu checksum e mantém os avisos de licença. O aplicativo preserva o mesmo domínio e os mesmos contratos operacionais; o transporte privado acrescenta autenticação temporária local e conserva CSRF. Não há regras ferroviárias duplicadas no inicializador.
+
+Os pontos de integração tratados incluem instância única, porta dinâmica, espera explícita pelo motor, validação de identidade do serviço, dados por conta do Windows, encerramento coordenado, supervisão por pipe para evitar processo órfão, logs, exportação nativa e manual offline. O banco fica fora da pasta de instalação para sobreviver a atualizações. Uma falha de inicialização oferece consulta de logs, nova tentativa ou saída.
+
+O teste com HTTP real identificou que uma recusa de CSRF podia ser redirecionada ao tratamento de erro e aparecer como 401. O handler agora escreve 403 diretamente, preservando o contrato de erro também no desktop.
+
 - Testes Java: cenário histórico, transferência 7 → 10, rejeição de integração sem via, incompatibilidade, via fechada, bloqueios simultâneos, estação desativada, reserva bidirecional, ciclos de alerta, efeitos operacionais, duas horas simuladas sem violar ocupação, números duplicados e dados inválidos.
 - Integração: autenticação real, papéis/CSRF, DTO sem sobreposição de estado, cadastros, contagens, histórico, importação atômica e limitada, isolamento de snapshots, reinício pausado, comandos concorrentes e edição de via em uso.
 - Falha de persistência: o estado não é publicado quando a gravação falha.
 - Frontend: compilação TypeScript e testes de posição, busca e relógio.
+- Desktop: seis testes Java de credencial local, origem, endereço remoto, CSRF e encerramento protegido; testes Node de limites de origem e handshake; teste com o Java incluído, banco em caminho com espaços, reinício persistente e perda do pipe do inicializador.
+- Aplicativo empacotado: smoke test em base isolada, renderização da janela autenticada, comando com CSRF, exportação JSON, captura da interface e verificação de que o processo Java encerrou.
+
+O instalador ainda não possui assinatura digital nem atualização automática. O pacote atual é Windows x64. Não há sincronização entre instalações desktop, autenticação individual de vários operadores nesse modo ou criptografia adicional do banco local; a proteção dos dados depende da conta do Windows. A implantação web continua disponível para operação centralizada.
 
 Os comandos de reprodução estão no README e são executados no CI. PostgreSQL externo, implantação HTTPS, carga prolongada em produção e operação ferroviária real precisam ser validados no ambiente de destino. O banco exercitado localmente é H2. A suíte não constitui homologação de segurança ferroviária.

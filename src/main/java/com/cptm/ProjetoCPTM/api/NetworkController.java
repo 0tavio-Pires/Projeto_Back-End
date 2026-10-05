@@ -9,6 +9,7 @@ import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 import tools.jackson.databind.json.JsonMapper;
 import java.util.*;
+import org.springframework.beans.factory.annotation.Value;
 import static com.cptm.ProjetoCPTM.application.Commands.*;
 
 @RestController
@@ -16,9 +17,10 @@ import static com.cptm.ProjetoCPTM.application.Commands.*;
 public class NetworkController {
     private final NetworkService service;
     private final JsonMapper json;
-    public NetworkController(NetworkService service,JsonMapper json) { this.service=service; this.json=json; }
+    private final boolean desktop;
+    public NetworkController(NetworkService service,JsonMapper json,@Value("${rail.desktop.enabled:false}") boolean desktop) { this.service=service; this.json=json; this.desktop=desktop; }
     @GetMapping("/session") public Object session(Authentication auth,CsrfToken token) {
-        return Map.of("username",auth.getName(),"roles",auth.getAuthorities().stream().map(Object::toString).toList(),"csrf",token.getToken(),"csrfHeader",token.getHeaderName());
+        return Map.of("username",auth.getName(),"roles",auth.getAuthorities().stream().map(Object::toString).toList(),"csrf",token.getToken(),"csrfHeader",token.getHeaderName(),"desktop",desktop);
     }
     @GetMapping("/network") public Object network() { return service.snapshot(); }
     @GetMapping("/history") public Object history() { return service.history(); }

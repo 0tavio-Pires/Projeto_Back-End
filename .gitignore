@@ -42,3 +42,8 @@ frontend/coverage/
 *.tsbuildinfo
 .env
 *.log
+desktop/node_modules/
+desktop/resources/
+desktop/release/
+desktop/.cache/
+desktop/.smoke/

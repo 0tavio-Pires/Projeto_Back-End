@@ -17,7 +17,7 @@ import java.util.*;
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfiguration {
-    @Bean UserDetailsService users(@Value("${rail.security.admin-password:}") String admin,
+    @Bean @Profile("!desktop") UserDetailsService users(@Value("${rail.security.admin-password:}") String admin,
             @Value("${rail.security.operator-password:}") String operator,@Value("${rail.security.viewer-password:}") String viewer,
             @Value("${rail.security.require-password:false}") boolean requirePassword) {
         if(admin.isBlank()) {
@@ -33,7 +33,13 @@ public class SecurityConfiguration {
         }
         return new InMemoryUserDetailsManager(users);
     }
-    @Bean SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    @Bean @Profile("desktop") UserDetailsService desktopUser() {
+        return new InMemoryUserDetailsManager(User.withUsername("local").password("{noop}"+UUID.randomUUID()).roles("ADMIN").build());
+    }
+    @Bean SecurityFilterChain filterChain(HttpSecurity http,
+            @Value("${rail.desktop.enabled:false}") boolean desktop,
+            @Value("${rail.desktop.token:}") String desktopToken) throws Exception {
+        if(desktop) http.addFilterBefore(new DesktopAccessFilter(desktopToken),org.springframework.security.web.csrf.CsrfFilter.class);
         http.authorizeHttpRequests(auth->auth
                 .requestMatchers("/","/index.html","/favicon.svg","/assets/**","/auth/csrf","/login").permitAll()
                 .requestMatchers("/actuator/**").hasRole("ADMIN").anyRequest().authenticated())
@@ -41,7 +47,11 @@ public class SecurityConfiguration {
                 .successHandler((request,response,authentication)->response.setStatus(204))
                 .failureHandler((request,response,exception)->{ response.setStatus(401); response.setContentType("application/json"); response.getWriter().write("{\"detail\":\"Usuário ou senha inválidos.\"}"); }))
             .logout(out->out.logoutUrl("/logout").logoutSuccessHandler((request,response,auth)->response.setStatus(204)))
-            .exceptionHandling(errors->errors.authenticationEntryPoint((request,response,exception)->{
+            .exceptionHandling(errors->errors.accessDeniedHandler((request,response,exception)->{
+                // Write directly: sendError would dispatch /error without the desktop request's authentication.
+                response.setStatus(403); response.setContentType("application/problem+json"); response.setCharacterEncoding("UTF-8");
+                response.getWriter().write("{\"status\":403,\"detail\":\"Operação não permitida ou token CSRF inválido.\"}");
+            }).authenticationEntryPoint((request,response,exception)->{
                 response.setStatus(401); response.setContentType("application/json"); response.getWriter().write("{\"detail\":\"Entre na sua conta para continuar.\"}");
             }))
             .headers(headers->headers.contentSecurityPolicy(csp->csp.policyDirectives("default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'")));

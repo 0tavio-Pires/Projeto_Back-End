@@ -9,7 +9,7 @@ export type Incident={id:string;label:string;description:string;category:string;
 export type Impact={incidentId:string;lineId:string;label:string;severity:string;level:string;effect:string;path:string[];reason:string};
 export type Network={schemaVersion:number;version:number;name:string;referenceDate:string;notes:string;sources:string[];updatedAt:string;running:boolean;timeScale:number;elapsedSeconds:number;lines:Record<string,Line>;stations:Record<string,Station>;nodes:Record<string,Node>;edges:Record<string,Edge>;profiles:Record<string,Profile>;dependencies:Record<string,Dependency>;trains:Record<string,Train>;incidents:Record<string,Incident>};
 export type Snapshot={network:Network;impacts:Impact[];metrics:{total:number;active:number;moving:number;waiting:number;byLine:Record<string,number>;openIncidents:number;meanDelay:number;medianDelay:number;modeDelay:number[]};fault:string|null};
-export type Session={username:string;roles:string[];csrf:string;csrfHeader:string};
+export type Session={username:string;roles:string[];csrf:string;csrfHeader:string;desktop:boolean};
 export type Route={trainId:string;targetLineId:string;destinationNodeId:string;edgeIds:string[];estimatedSeconds:number;lineChanges:number;stateVersion:number;steps:string[]};
 export type History={id:string;version:number;at:string;actor:string;action:string;detail:string};
 export type Action=(path:string,body?:unknown,method?:string)=>Promise<boolean>;

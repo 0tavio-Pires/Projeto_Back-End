@@ -1,0 +1,45 @@
+{
+  "name": "ferrovia-desktop",
+  "productName": "Ferrovia",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Centro de operações e simulação ferroviária",
+  "author": "Projeto Ferrovia",
+  "main": "src/main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test test/*.test.cjs",
+    "test:integration": "node test/engine-integration.cjs",
+    "smoke": "electron . --smoke-test",
+    "pack": "electron-builder --win --x64 --dir",
+    "dist": "electron-builder --win nsis --x64"
+  },
+  "devDependencies": {"electron": "44.5.1", "electron-builder": "26.15.3"},
+  "build": {
+    "appId": "br.com.ferrovia.desktop",
+    "productName": "Ferrovia",
+    "asar": true,
+    "directories": {"output": "release", "buildResources": "build"},
+    "files": ["src/**", "build/icon.ico", "package.json"],
+    "extraResources": [
+      {"from": "resources/engine", "to": "engine"},
+      {"from": "resources/runtime", "to": "runtime"},
+      {"from": "resources/manual", "to": "manual"},
+      {"from": "runtime-lock.json", "to": "runtime-lock.json"}
+    ],
+    "win": {"target": ["nsis"], "icon": "build/icon.ico", "signExecutable": false},
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Ferrovia",
+      "deleteAppDataOnUninstall": false,
+      "installerLanguages": ["pt_BR"],
+      "language": "1046",
+      "artifactName": "Ferrovia-Setup-${version}-${arch}.${ext}"
+    }
+  }
+}

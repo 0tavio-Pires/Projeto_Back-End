@@ -1,14 +1,16 @@
 # Ferrovia · Centro de Operações
 
-Sistema de supervisão e simulação de uma rede ferroviária, com API Java e interface web em português. A referência inicial contém **13 linhas históricas de São Paulo, 173 estações e 26 composições identificadas**.
+Aplicativo de supervisão e simulação ferroviária para **Windows**, com janela própria, instalador e interface em português. A referência inicial contém **13 linhas históricas de São Paulo, 173 estações e 26 composições identificadas**. A mesma aplicação também pode ser executada como servidor web.
 
-**Stack:** Java 21 · Spring Boot 4.1.1 · React 19.3 · TypeScript 7 · Vite 8 · H2/PostgreSQL · Flyway.
+**Stack:** Electron 44 · Java 21 · Spring Boot 4.1.1 · React 19.3 · TypeScript 7 · Vite 8 · H2/PostgreSQL · Flyway.
 
-**Validação local:** 43 testes Java e 5 testes de frontend aprovados, compilação de produção concluída e login/painel/planejamento de rota conferidos no navegador. A configuração de CI foi adicionada; sua execução remota depende do envio do repositório.
+O desktop inicia e encerra o motor automaticamente. Seus dados ficam na conta do Windows e o Java necessário acompanha o instalador. Não é necessário abrir navegador ou terminal para usar o aplicativo instalado.
 
 ## Conteúdo
 
-- [Executar](#executar)
+- [Instalar e abrir o aplicativo](#instalar-e-abrir-o-aplicativo)
+- [Menus, dados e atualizações](#menus-dados-e-atualizações)
+- [Executar como servidor web](#executar-como-servidor-web)
 - [Operação pelo painel](#operação-pelo-painel)
 - [Tutorial de uso](#tutorial-de-uso)
 - [Modelo da rede](#modelo-da-rede)
@@ -19,7 +21,64 @@ Sistema de supervisão e simulação de uma rede ferroviária, com API Java e in
 - [Solução de problemas](#solução-de-problemas)
 - [Referência e limites](#referência-e-limites)
 
-## Executar
+## Instalar e abrir o aplicativo
+
+Requisito de uso: **Windows 10/11 x64**. O pacote já contém Electron, a interface, o motor e Eclipse Temurin Java 21. Internet é necessária para obter o instalador; a simulação funciona offline depois de instalada. Links de referência externos dependem de conexão.
+
+1. Abra `Ferrovia-Setup-1.0.0-x64.exe`, gerado em `desktop/release/`.
+2. Escolha a pasta de instalação e conclua o assistente. A instalação é para a sua conta e cria atalhos no menu Iniciar e na área de trabalho.
+3. Abra **Ferrovia** pelo atalho. Aguarde a tela **Preparando sua rede**.
+4. O painel abre como **Aplicativo local**, com acesso à operação e à infraestrutura. O desktop usa a conta do Windows; não pede usuário/senha da versão web.
+5. Confira as 26 composições iniciais e siga o [tutorial de uso](#tutorial-de-uso). Se houver um cenário salvo, ele será recuperado.
+6. Para encerrar, feche a janela ou use **Arquivo → Sair**. O motor pausa a simulação, salva o estado confirmado e encerra junto.
+
+O instalador desta versão ainda não possui assinatura digital de editor. Para distribuir uma versão assinada, configure o certificado no processo de release. Não há atualização automática.
+
+### Gerar o instalador a partir do código
+
+Para desenvolver/compilar, use **Windows x64, JDK 21 e Node.js 22.12+**. Os downloads iniciais acessam npm, Maven Central, GitHub/Adoptium e os componentes de empacotamento do Electron. Não é necessário instalar Rust, Maven ou NSIS globalmente.
+
+```powershell
+$env:JAVA_HOME = 'C:\Program Files\Java\jdk-21.0.11' # ajuste para seu JDK 21
+.\scripts\build-desktop.ps1
+.\scripts\run-desktop.ps1
+```
+
+O build compila a interface e o backend, executa os testes, obtém o Java redistribuível com **SHA-256 fixado** e gera:
+
+| Artefato | Uso |
+| --- | --- |
+| `desktop/release/Ferrovia-Setup-1.0.0-x64.exe` | Instalador para o usuário final |
+| `desktop/release/Ferrovia-Setup-1.0.0-x64.exe.sha256` | Checksum do instalador |
+| `desktop/release/win-unpacked/Ferrovia.exe` | Executar sem instalar, mantendo toda a pasta `win-unpacked` ao lado |
+| `desktop/resources/` | Java, JAR e manual preparados para desenvolvimento |
+
+`scripts/run-desktop.ps1` abre o executável já gerado. Para atualizar somente o inicializador depois de um build completo, use `scripts/build-desktop.ps1 -SkipCoreBuild`; essa opção reutiliza o JAR existente e não incorpora mudanças posteriores do backend/frontend. Binários e dependências não são versionados no Git.
+
+## Menus, dados e atualizações
+
+| Menu / atalho | Operação |
+| --- | --- |
+| **Arquivo → Exportar cenário** / `Ctrl+Shift+S` | Escolher onde salvar um JSON consistente da rede |
+| **Arquivo → Abrir pasta de dados** | Abrir a pasta do banco H2 |
+| **Arquivo → Abrir registros** | Consultar `engine.log` para diagnóstico |
+| **Exibir** | Recarregar o painel, alterar zoom ou entrar em tela cheia |
+| **Ajuda → Manual de uso** | Abrir uma cópia offline deste README |
+| **Arquivo → Sair** / `Alt+F4` | Encerrar a janela e o motor |
+
+Os dados do desktop são guardados em `%APPDATA%\Ferrovia`. Para abrir essa pasta manualmente, pressione `Win+R`, digite o caminho e confirme:
+
+- `data\ferrovia.mv.db`: cenário persistido e auditoria.
+- `logs\engine.log`: registro de inicialização, operação e encerramento. Ao ultrapassar 5 MB, ele é rotacionado na próxima abertura para `engine.previous.log`.
+- Outros arquivos nessa pasta pertencem ao ambiente da janela do aplicativo.
+
+Somente uma instância abre por conta do Windows. Um segundo clique no ícone traz a janela existente à frente. Contas diferentes têm cenários separados. O modo desktop é local e administrativo; para vários operadores, autenticação individual e banco central, use a implantação web.
+
+**Backup e migração:** exporte em **Arquivo → Exportar cenário** ou **Infraestrutura → Exportar JSON**. Para levar dados da versão web ao aplicativo, exporte no navegador e use **Infraestrutura → Importar JSON** no desktop. A importação substitui a rede atual após confirmação e validação. O JSON transfere o cenário; não transfere contas nem o histórico de auditoria anterior. Para backup completo, feche o aplicativo e copie a pasta `data`.
+
+**Atualizar:** feche o aplicativo, faça backup e execute o novo instalador. Instalação e desinstalação preservam `%APPDATA%\Ferrovia`; desinstalar não apaga seu cenário. **Restaurar referência**, na aba Infraestrutura, substitui o cenário atual pela base inicial mediante confirmação.
+
+## Executar como servidor web
 
 Requisitos: **JDK 21**, **Node.js 22.12 ou superior** e acesso ao Maven Central/npm na primeira compilação. Maven é obtido pelo wrapper com checksum SHA-256 fixado. Não é necessário instalar Maven globalmente.
 
@@ -64,15 +123,13 @@ No cenário inicial, selecione a composição **0701 (`L7-T1`)**, na Luz, e plan
 
 ### 1. Abrir o sistema pela primeira vez
 
-1. Abra um terminal na pasta que contém `pom.xml` e este README.
-2. Confira os requisitos com `java -version` e `node --version`. Para o build recomendado, configure `JAVA_HOME` para o JDK 21.
-3. Execute `./scripts/build.ps1` no PowerShell. Espere a mensagem `Pronto: target/ProjetoCPTM-1.0.0-SNAPSHOT.jar`.
-4. Execute `./scripts/run.ps1` e mantenha esse terminal aberto. O processo é o servidor da aplicação.
-5. Se você não configurou `RAIL_ADMIN_PASSWORD`, procure no terminal a mensagem **Acesso local temporário: usuário admin / senha ...**. Copie somente a senha apresentada.
-6. No navegador, abra `http://127.0.0.1:8080`. Digite `admin` e a senha. Clique em **Acessar central**.
-7. Na primeira inicialização da base, o painel mostra **26 trens em circulação**, **13 linhas**, **173 estações** e o relógio **pausado**. Se já existem dados salvos, o sistema recupera esse cenário.
+1. Instale o aplicativo conforme [Instalar e abrir o aplicativo](#instalar-e-abrir-o-aplicativo).
+2. Abra **Ferrovia** pelo menu Iniciar ou pelo atalho da área de trabalho.
+3. Aguarde a preparação. O painel identifica a sessão como **Aplicativo local**.
+4. Na primeira inicialização da base, o painel mostra **26 trens em circulação**, **13 linhas**, **173 estações** e o relógio **pausado**. Se já existem dados salvos, o sistema recupera esse cenário.
+5. Para encerrar, feche a janela. Na próxima abertura, a rede volta ao último estado confirmado, com o relógio pausado.
 
-Você só precisa compilar novamente quando o código ou a interface mudar. Nas próximas utilizações, execute `./scripts/run.ps1`. Para encerrar, pause pelo painel e pressione **Ctrl+C** no terminal do servidor. O estado confirmado fica no banco e será recuperado com o relógio pausado.
+Se estiver usando a versão web, siga [Executar como servidor web](#executar-como-servidor-web), entre com `admin` e a senha exibida no terminal ou definida no ambiente. Mantenha o terminal aberto durante o uso e encerre com **Ctrl+C**. Os passos operacionais a seguir são os mesmos nos dois modos; o aplicativo local já possui as permissões de administrador.
 
 ### 2. Entender o painel e localizar um trem
 
@@ -100,7 +157,7 @@ Os indicadores superiores representam a rede inteira. Os números ao lado de cad
 
 Este exemplo usa uma base inicial pausada. Se a plataforma indicada já estiver ocupada, escolha outra plataforma livre.
 
-1. Entre como `admin` ou `operator` e clique em **Nova composição**.
+1. No aplicativo local, clique em **Nova composição**. Na versão web, entre como `admin` ou `operator`.
 2. Informe o identificador `T-8501` e o número de composição `8501`. Ambos precisam ser únicos.
 3. Em **Modelo**, informe `Composição de treinamento`.
 4. Selecione **1 · Azul** em **Linha de entrada** e **Metrô 1/2/3 · referência** em **Perfil técnico**.
@@ -165,7 +222,7 @@ Se houver duas ocorrências bloqueando o mesmo local, resolver apenas uma delas 
 
 ### 9. Administrar a infraestrutura
 
-1. Entre como `admin`, pause a simulação e abra **Infraestrutura**.
+1. No aplicativo local, pause a simulação e abra **Infraestrutura**. Na versão web, entre como `admin`.
 2. Escolha o tipo de cadastro no seletor: **Perfis técnicos**, **Linhas**, **Estações**, **Plataformas**, **Vias e conexões** ou **Dependências de alertas**.
 3. Use **Novo cadastro** para criar ou **Editar** para alterar um item existente.
 4. Para criar uma linha do zero, siga a ordem: **perfil técnico → linha → estações → plataformas → vias**. Crie plataformas A/B e trechos direcionais/retornos de acordo com a topologia pretendida.
@@ -216,6 +273,8 @@ O roteador usa Dijkstra com custo de tempo de viagem, parada de 8 segundos e pen
 
 ```mermaid
 flowchart LR
+    DESKTOP[Electron: janela e ciclo de vida] --> GUI
+    DESKTOP -->|Java incluído / transporte local privado| API
     GUI[React / TypeScript] --> API[API REST + sessão + CSRF]
     API --> APP[NetworkService: comandos serializados]
     CLOCK[Scheduler Spring] --> APP
@@ -242,8 +301,18 @@ Pastas:
 | `security` | Perfis, sessão, CSRF e limite de corpo JSON |
 | `api` | REST, erros estruturados e SSE |
 | `frontend/src` | Mapa SVG, operação, formulários e cadastros |
+| `desktop/src` | Janela Electron, transporte privado, menus e supervisão do processo Java |
+| `desktop/test` | Isolamento de origem e integração real do motor com Java incluído |
+| `src/main/java/.../desktop` | Handshake de abertura, encerramento e supervisão do inicializador |
+| `scripts/*desktop.ps1` | Preparação de recursos, compilação, empacotamento e abertura |
 
 ## Segurança e persistência
+
+No desktop, o motor escuta apenas em `127.0.0.1`, numa porta disponível escolhida pelo sistema. Cada abertura gera uma credencial temporária de 256 bits. Somente o processo principal do Electron a acrescenta às requisições da janela para essa origem; ela não é exposta à interface, URL, arquivo ou argumentos de linha de comando. O servidor exige essa credencial inclusive para arquivos estáticos, valida a origem e mantém proteção CSRF nos comandos.
+
+A janela executa com sandbox, isolamento de contexto e sem acesso ao Node.js. Permissões de câmera, microfone e localização são negadas. Navegações externas são bloqueadas; somente links HTTPS das referências oficiais cadastradas podem abrir no navegador padrão. O inicializador usa uma porta dinâmica, acompanha o encerramento do Java e impede processos duplicados. Se o inicializador cair, o motor detecta o fechamento do canal de supervisão e encerra. Os dados têm a proteção da conta do Windows; não há criptografia adicional do banco nem isolamento contra processos privilegiados dessa mesma conta.
+
+Na versão web, os perfis de acesso são:
 
 | Perfil | Permissões |
 | --- | --- |
@@ -269,6 +338,8 @@ Backup: use a exportação do cenário pela interface para um estado consistente
 
 ## Configuração do ambiente
 
+As variáveis abaixo configuram a implantação web. O desktop fixa perfil, endereço, porta, banco local e Java incluído; não herda opções JVM nem configurações `SPRING_*`, `SERVER_*`, `MANAGEMENT_*` e `RAIL_*` do ambiente. `RAIL_DESKTOP_TOKEN` é gerado internamente, não deve ser configurado pelo usuário. Não inicie o perfil `desktop` manualmente para expor uma API pública.
+
 | Variável / propriedade | Padrão | Uso |
 | --- | --- | --- |
 | `JAVA_HOME` | JDK disponível no ambiente | Caminho do JDK; recomendado 21 |
@@ -289,6 +360,8 @@ Propriedades Spring também podem ser passadas como argumentos, por exemplo `--r
 O arquivo `.env` não é carregado automaticamente pelo Spring nem pelos scripts. Configure variáveis no processo, serviço ou gerenciador de implantação. Não adicione credenciais ao Git. Arquivos H2, logs, dependências, artefatos compilados e arquivos `.env` estão no `.gitignore`.
 
 ## API
+
+Os exemplos de integração HTTP se aplicam ao servidor web. A porta interna do aplicativo é privada e varia entre aberturas. O contrato de sessão inclui `desktop: true|false`; o endpoint `POST /desktop/shutdown` só existe no perfil desktop e exige credencial local e CSRF.
 
 Base `/api/v1`. Respostas de erro usam `application/problem+json`, `status`, `detail` e, nos erros de domínio, `code`. Códigos principais: 400 entrada inválida, 401 sessão ausente, 403 permissão/CSRF, 404 referência ausente, 409 conflito, 413 corpo muito grande.
 
@@ -369,12 +442,34 @@ Pop-Location
 
 O script de build executa ambos e gera `target/ProjetoCPTM-1.0.0-SNAPSHOT.jar`. Cobertura em `target/site/jacoco/index.html`. CI em `.github/workflows/ci.yml`. Testes usam H2 em memória e relógio automático desabilitado, sem alterar `data/`.
 
+Para desenvolver o inicializador depois de preparar os recursos:
+
+```powershell
+.\scripts\prepare-desktop.ps1
+Push-Location desktop
+npm ci
+npm test
+npm run test:integration
+npm run smoke
+npm start
+Pop-Location
+```
+
+O teste de integração executa o Java incluído, verifica o acesso privado, CSRF, persistência após reinício e encerramento por perda do processo pai. Usa bases isoladas em `desktop/.smoke/`. O smoke test abre uma janela oculta, verifica a interface autenticada, executa um comando pela janela, captura uma imagem e encerra. Seus dados e imagem ficam em uma pasta temporária `ferrovia-smoke-*`, exibida no resultado. Ele não usa o cenário de `%APPDATA%\Ferrovia`. `npm start` abre o aplicativo para uso normal, com os dados da conta do Windows.
+
+O CI valida o backend/frontend em Linux e gera o instalador em Windows. O Java redistribuído é fixado em `desktop/runtime-lock.json`, com origem e SHA-256; os termos acompanham `runtime/legal` e `desktop/THIRD-PARTY-NOTICES.md`. A execução remota de CI depende do envio do repositório.
+
 Para frontend com recarga automática, inicie o backend e execute `npm run dev` em `frontend`; abra `http://127.0.0.1:5173`. O proxy mantém API e autenticação na mesma origem do navegador.
 
 ## Solução de problemas
 
 | Sintoma | Ação |
 | --- | --- |
+| Aplicativo não consegue iniciar o motor | Use **Abrir registros** no diálogo de erro; confira espaço em disco e acesso à pasta `%APPDATA%\Ferrovia`; tente novamente após corrigir a causa |
+| Componentes do aplicativo ausentes | Reinstale ou execute o build completo; não mova apenas `Ferrovia.exe` para fora de `win-unpacked` |
+| Segundo clique não abre outra rede | O aplicativo usa instância única; a janela já aberta recebe o foco |
+| Desktop parece não conter os dados da versão web | Os bancos são separados. Exporte o cenário na web e importe no aplicativo |
+| Erro 403 ao abrir a porta interna em um navegador | O serviço desktop é privado. Abra o aplicativo ou execute a versão web para usar navegador/API |
 | `release version 21 not supported` | Aponte `JAVA_HOME` para o JDK 21 e execute novamente o build |
 | `npm` não encontrado ou erro de versão do Vite | Instale Node.js 22.12+ e reabra o terminal |
 | PowerShell bloqueia o script local | Execute os comandos manuais de build documentados acima ou use o terminal conforme a política do seu ambiente |
