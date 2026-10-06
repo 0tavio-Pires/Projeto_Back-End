@@ -19,6 +19,13 @@
     "appId": "br.com.ferrovia.desktop",
     "productName": "Ferrovia",
     "asar": true,
+    "electronFuses": {
+      "runAsNode": false,
+      "enableNodeOptionsEnvironmentVariable": false,
+      "enableNodeCliInspectArguments": false,
+      "enableEmbeddedAsarIntegrityValidation": true,
+      "onlyLoadAppFromAsar": true
+    },
     "directories": {"output": "release", "buildResources": "build"},
     "files": ["src/**", "build/icon.ico", "package.json"],
     "extraResources": [

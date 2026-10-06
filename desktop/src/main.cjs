@@ -65,7 +65,9 @@ async function createWindow() {
   window.on('close', event => { if (!quitting) { event.preventDefault(); app.quit(); } });
   Menu.setApplicationMenu(Menu.buildFromTemplate([
     { label: 'Arquivo', submenu: [
-      { label: 'Exportar cenário…', accelerator: 'CmdOrCtrl+Shift+S', click: () => exportScenario().catch(fatal) },
+      { label: 'Exportar cenário…', accelerator: 'CmdOrCtrl+Shift+S', click: () => exportScenario().catch(error => dialog.showMessageBox(window, {
+        type: 'error', title: 'Não foi possível exportar', message: error.message, detail: 'Escolha um local em que sua conta possa gravar e tente novamente.'
+      })) },
       { label: 'Abrir pasta de dados', click: () => shell.openPath(path.join(dataDirectory, 'data')) },
       { label: 'Abrir registros', click: () => shell.openPath(path.join(dataDirectory, 'logs')) },
       { type: 'separator' }, { label: 'Sair', accelerator: 'Alt+F4', click: () => app.quit() }

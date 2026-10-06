@@ -457,7 +457,13 @@ Pop-Location
 
 O teste de integração executa o Java incluído, verifica o acesso privado, CSRF, persistência após reinício e encerramento por perda do processo pai. Usa bases isoladas em `desktop/.smoke/`. O smoke test abre uma janela oculta, verifica a interface autenticada, executa um comando pela janela, captura uma imagem e encerra. Seus dados e imagem ficam em uma pasta temporária `ferrovia-smoke-*`, exibida no resultado. Ele não usa o cenário de `%APPDATA%\Ferrovia`. `npm start` abre o aplicativo para uso normal, com os dados da conta do Windows.
 
+O build desktop executa ainda `scripts/test-desktop.ps1` sobre **o executável empacotado**: verifica abertura, comando, download de exportação e ausência de processo Java órfão. Os relatórios e a captura ficam em `desktop/.smoke/`. Para repetir apenas essa verificação, execute o script diretamente.
+
 O CI valida o backend/frontend em Linux e gera o instalador em Windows. O Java redistribuído é fixado em `desktop/runtime-lock.json`, com origem e SHA-256; os termos acompanham `runtime/legal` e `desktop/THIRD-PARTY-NOTICES.md`. A execução remota de CI depende do envio do repositório.
+
+**Validação local em 05/10/2026:** 49 testes Java, 5 testes de frontend e 3 testes de política desktop aprovados; integração com o Java incluído e smoke test do executável Windows aprovados. O smoke test cobre renderização, comando com CSRF, exportação e encerramento do processo Java. O assistente interativo de instalação/desinstalação não foi executado nessa verificação.
+
+**Dependências de build:** o `npm audit` do desktop identifica 8 avisos moderados derivados de uma única dependência transitiva, `sprintf-js`, usada pela cadeia de download do `electron-builder`. Ela não integra o código de execução da aplicação no ASAR. O achado, a ausência de correção publicada e o motivo para não forçar um downgrade do empacotador estão registrados na [auditoria](docs/AUDITORIA_IMPLEMENTADA.md). Consulte novamente o relatório ao atualizar as versões.
 
 Para frontend com recarga automática, inicie o backend e execute `npm run dev` em `frontend`; abra `http://127.0.0.1:5173`. O proxy mantém API e autenticação na mesma origem do navegador.
 

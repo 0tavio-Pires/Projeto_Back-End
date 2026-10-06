@@ -52,4 +52,12 @@ O teste com HTTP real identificou que uma recusa de CSRF podia ser redirecionada
 
 O instalador ainda não possui assinatura digital nem atualização automática. O pacote atual é Windows x64. Não há sincronização entre instalações desktop, autenticação individual de vários operadores nesse modo ou criptografia adicional do banco local; a proteção dos dados depende da conta do Windows. A implantação web continua disponível para operação centralizada.
 
+### Dependência transitiva do empacotador
+
+Em 05/10/2026, `npm audit` reportou 8 avisos moderados na árvore desktop, todos derivados de `sprintf-js <=1.1.3`, pela cadeia `electron-builder → app-builder-lib → @electron/get → global-agent → roarr`. O [aviso GHSA-hp3w-g68c-fv3c](https://github.com/advisories/GHSA-hp3w-g68c-fv3c) descreve negação de serviço por precisão sem limite em strings de formatação e informa que não há versão corrigida publicada.
+
+Essa cadeia pertence às ferramentas de build. O aplicativo empacotado contém apenas o código do inicializador, arquivos estáticos próprios e os runtimes; não distribui esses módulos npm no ASAR. O download do Java também tem checksum fixado. Isso limita a exposição do achado ao ambiente de construção; não representa correção da dependência vulnerável.
+
+Não foi aplicado `npm audit fix --force`: a sugestão atual recua o empacotador para 26.5.0. Também não foi forçada a versão 5 de `@electron/get`, pois ela troca o downloader e suas opções de proxy/timeout, enquanto o empacotador instalado usa o contrato anterior. Acompanhar a correção upstream e repetir build, download em cache vazio e testes desktop ao atualizar. O relatório não afirma ausência de vulnerabilidades em toda a cadeia Java/Chromium.
+
 Os comandos de reprodução estão no README e são executados no CI. PostgreSQL externo, implantação HTTPS, carga prolongada em produção e operação ferroviária real precisam ser validados no ambiente de destino. O banco exercitado localmente é H2. A suíte não constitui homologação de segurança ferroviária.
